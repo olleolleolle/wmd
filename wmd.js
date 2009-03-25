@@ -22,7 +22,7 @@ Attacklab.wmdBase = function(){
 	
 	// Used to work around some browser bugs where we can't use feature testing.
 	global.isIE 		= /msie/.test(nav.userAgent.toLowerCase());
-	global.isIE_5or6 	= /msie 6/.test(nav.userAgent.toLowerCase()) || /msie 5/.test(nav.userAgent.toLowerCase());
+	global.isIE_5or6 	= /msie 6/.test(nav.userAgent.toLowerCase()) || (/msie 5/).test(nav.userAgent.toLowerCase());
 	global.isIE_7plus 	= global.isIE && !global.isIE_5or6;
 	global.isOpera 		= /opera/.test(nav.userAgent.toLowerCase());
 	global.isKonqueror 	= /konqueror/.test(nav.userAgent.toLowerCase());
@@ -99,7 +99,7 @@ Attacklab.wmdBase = function(){
 		}
 		else if (elem.currentStyle) {
 		    // IE
-			return elem.currentStyle["display"] !== "none";
+			return elem.currentStyle.display !== "none";
 		}
 	};
 	
@@ -175,7 +175,7 @@ Attacklab.wmdBase = function(){
 		pattern = pre + pattern + post;
 		
 		return new RegExp(pattern, flags);
-	}
+	};
 
 	
 	// Sets the image for a button passed to the WMD editor.
@@ -739,7 +739,7 @@ Attacklab.wmdBase = function(){
 			
 			var handlePaste = function(){
 				if (global.isIE || (inputStateObj && inputStateObj.text != wmd.panels.input.value)) {
-					if (timer == undefined) {
+					if (timer === undefined) {
 						mode = "paste";
 						saveState();
 						refreshState();
@@ -901,14 +901,14 @@ Attacklab.wmdBase = function(){
 						}
 						doClick(this);
 						return false;
-					}
+					};
 				}
 			}
 			else {
 				button.style.backgroundPosition = button.XShift + " " + disabledYShift;
 				button.onmouseover = button.onmouseout = button.onclick = function(){};
 			}
-		}
+		};
 	
 		var makeSpritedButtonRow = function(){
 		 	
@@ -1073,7 +1073,7 @@ Attacklab.wmdBase = function(){
 			
 			var helpAnchor = document.createElement("a");
 			helpAnchor.href = helpLink;
-			helpAnchor.target = helpTarget
+			helpAnchor.target = helpTarget;
 			helpAnchor.title = helpHoverTitle;
 			helpButton.appendChild(helpAnchor);
 			
@@ -1081,7 +1081,7 @@ Attacklab.wmdBase = function(){
 			buttonRow.appendChild(helpButton);
 			
 			setUndoRedoButtonStates();
-		}
+		};
 		
 		var setupEditor = function(){
 		
@@ -1217,7 +1217,7 @@ Attacklab.wmdBase = function(){
 				inputBox.value = text;
 			};
 			
-			if (!/markdown/.test(wmd.wmd_env.output.toLowerCase())) {
+			if (!(/markdown/).test(wmd.wmd_env.output.toLowerCase())) {
 				if (markdownConverter) {
 					inputBox.value = markdownConverter.makeHtml(text);
 					top.setTimeout(callback, 0);
@@ -1281,7 +1281,7 @@ Attacklab.wmdBase = function(){
 				this.text = inputArea.value;
 			}
 			
-		}
+		};
 		
 		// Sets the selected text in the input box after we've performed an
 		// operation.
@@ -1367,7 +1367,7 @@ Attacklab.wmdBase = function(){
 		// Restore this state into the input area.
 		this.restore = function(){
 		
-			if (stateObj.text != undefined && stateObj.text != inputArea.value) {
+			if (stateObj.text !== undefined && stateObj.text != inputArea.value) {
 				inputArea.value = stateObj.text;
 			}
 			this.setInputAreaSelection();
@@ -1885,12 +1885,10 @@ Attacklab.wmdBase = function(){
 		
 			if (wmd.panels.preview) {
 				wmd.panels.preview.scrollTop = (wmd.panels.preview.scrollHeight - wmd.panels.preview.clientHeight) * getScaleFactor(wmd.panels.preview);
-				;
 			}
 			
 			if (wmd.panels.output) {
 				wmd.panels.output.scrollTop = (wmd.panels.output.scrollHeight - wmd.panels.output.clientHeight) * getScaleFactor(wmd.panels.output);
-				;
 			}
 		};
 		
@@ -1990,13 +1988,13 @@ Attacklab.wmdBase = function(){
 	// Moves the cursor to the next line and continues lists, quotes and code.
 	command.doAutoindent = function(chunk, postProcessing, useDefaultText){
 		
-		chunk.before = chunk.before.replace(/(\n|^)[ ]{0,3}([*+-]|\d+[.])[ \t]*\n$/, "\n\n");
+		chunk.before = chunk.before.replace(/(\n|^)[ ]{0,3}([*+\-]|\d+[.])[ \t]*\n$/, "\n\n");
 		chunk.before = chunk.before.replace(/(\n|^)[ ]{0,3}>[ \t]*\n$/, "\n\n");
 		chunk.before = chunk.before.replace(/(\n|^)[ \t]+\n$/, "\n\n");
 		
 		useDefaultText = false;
 		
-		if(/(\n|^)[ ]{0,3}([*+-])[ \t]+.*\n$/.test(chunk.before)){
+		if(/(\n|^)[ ]{0,3}([*+\-])[ \t]+.*\n$/.test(chunk.before)){
 			if(command.doList){
 				command.doList(chunk, postProcessing, false, true);
 			}
@@ -2085,16 +2083,16 @@ Attacklab.wmdBase = function(){
 			command.unwrap(chunk);
 			replaceBlanksInTags(false);
 			
-			if(!/^(\n|^)[ ]{0,3}>/.test(chunk.selection) && chunk.startTag){
+			if(!(/^(\n|^)[ ]{0,3}>/).test(chunk.selection) && chunk.startTag){
 				chunk.startTag = chunk.startTag.replace(/\n{0,2}$/, "\n\n");
 			}
 			
-			if(!/(\n|^)[ ]{0,3}>.*$/.test(chunk.selection) && chunk.endTag){
+			if(!(/(\n|^)[ ]{0,3}>.*$/).test(chunk.selection) && chunk.endTag){
 				chunk.endTag=chunk.endTag.replace(/^\n{0,2}/, "\n\n");
 			}
 		}
 		
-		if(!/\n/.test(chunk.selection)){
+		if(!(/\n/).test(chunk.selection)){
 			chunk.selection = chunk.selection.replace(/^(> *)/,
 			function(wholeMatch, blanks){
 				chunk.startTag += blanks;
@@ -2110,7 +2108,7 @@ Attacklab.wmdBase = function(){
 		
 		// Use 'four space' markdown if the selection is on its own
 		// line or is multiline.
-		if((!hasTextAfter && !hasTextBefore) || /\n/.test(chunk.selection)){
+		if((!hasTextAfter && !hasTextBefore) || (/\n/).test(chunk.selection)){
 			
 			chunk.before = chunk.before.replace(/[ ]{4}$/,
 				function(totalMatch){
@@ -2170,8 +2168,8 @@ Attacklab.wmdBase = function(){
 				
 		// These are identical except at the very beginning and end.
 		// Should probably use the regex extension function to make this clearer.
-		var previousItemsRegex = /(\n|^)(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*$/;
-		var nextItemsRegex = /^\n*(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*/;
+		var previousItemsRegex = /(\n|^)(([ ]{0,3}([*+\-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+\-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*$/;
+		var nextItemsRegex = /^\n*(([ ]{0,3}([*+\-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+\-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*/;
 		
 		// The default bullet is a dash but others are possible.
 		// This has nothing to do with the particular HTML bullet,
@@ -2203,7 +2201,7 @@ Attacklab.wmdBase = function(){
 			}
 			
 			// Renumber/bullet the list element.
-			itemText = itemText.replace(/^[ ]{0,3}([*+-]|\d+[.])\s/gm,
+			itemText = itemText.replace(/^[ ]{0,3}([*+\-]|\d+[.])\s/gm,
 				function( _ ){
 					return getItemPrefix();
 				});
@@ -2211,9 +2209,9 @@ Attacklab.wmdBase = function(){
 			return itemText;
 		};
 		
-		chunk.findTags(/(\n|^)*[ ]{0,3}([*+-]|\d+[.])\s+/, null);
+		chunk.findTags(/(\n|^)*[ ]{0,3}([*+\-]|\d+[.])\s+/, null);
 		
-		if(chunk.before && !/\n$/.test(chunk.before) && !/^\n/.test(chunk.startTag)){
+		if(chunk.before && !(/\n$/).test(chunk.before) && !(/^\n/).test(chunk.startTag)){
 			chunk.before += chunk.startTag;
 			chunk.startTag = "";
 		}
@@ -2239,7 +2237,7 @@ Attacklab.wmdBase = function(){
 		
 		chunk.before = chunk.before.replace(previousItemsRegex,
 			function(itemText){
-				if(/^\s*([*+-])/.test(itemText)){
+				if(/^\s*([*+\-])/.test(itemText)){
 					bullet = re.$1;
 				}
 				nLinesBefore = /[^\n]\n\n[^\n]/.test(itemText) ? 1 : 0;
@@ -2296,10 +2294,10 @@ Attacklab.wmdBase = function(){
 		// Try to get the current header level by looking for - and = in the line
 		// below the selection.
 		chunk.findTags(null, /\s?(-+|=+)/);
-		if(/=+/.test(chunk.endTag)){
+		if((/(=)+/).test(chunk.endTag)){
 			headerLevel = 1;
 		}
-		if(/-+/.test(chunk.endTag)){
+		if(/\-+/.test(chunk.endTag)){
 			headerLevel = 2;
 		}
 		
@@ -2310,7 +2308,7 @@ Attacklab.wmdBase = function(){
 		// We make a level 2 header if there is no current header.
 		// If there is a header level, we substract one from the header level.
 		// If it's already a level 1 header, it's removed.
-		var headerLevelToCreate = headerLevel == 0 ? 2 : headerLevel - 1;
+		var headerLevelToCreate = headerLevel === 0 ? 2 : headerLevel - 1;
 		
 		if(headerLevelToCreate > 0){
 			
@@ -2332,7 +2330,7 @@ Attacklab.wmdBase = function(){
 		chunk.startTag = "----------\n";
 		chunk.selection = "";
 		chunk.addBlankLines(2, 1, true);
-	}
+	};
 };
 
 
@@ -2355,13 +2353,16 @@ if(!Attacklab.wmd)
 			
 				for(var key in env)
 				{
-					Attacklab.wmd_env[key] = env[key];
+					if (typeof env[key] !== 'function')
+					{
+						Attacklab.wmd_env[key] = env[key];
+					}
 				}
 			};
 			
 			mergeEnv(Attacklab.wmd_defaults);
 			mergeEnv(Attacklab.account_options);
-			mergeEnv(top["wmd_options"]);
+			mergeEnv(top.wmd_options);
 			Attacklab.full = true;
 			
 			var defaultButtons = "bold italic link blockquote code image ol ul heading hr";
@@ -2374,5 +2375,5 @@ if(!Attacklab.wmd)
 	Attacklab.wmd();
 	Attacklab.wmdBase();
 	Attacklab.Util.startEditor();
-};
+}
 
