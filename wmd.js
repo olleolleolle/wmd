@@ -739,7 +739,7 @@ Attacklab.wmdBase = function(){
 			
 			var handlePaste = function(){
 				if (global.isIE || (inputStateObj && inputStateObj.text != wmd.panels.input.value)) {
-					if (timer === undefined) {
+					if (timer == undefined) {
 						mode = "paste";
 						saveState();
 						refreshState();
@@ -1367,7 +1367,7 @@ Attacklab.wmdBase = function(){
 		// Restore this state into the input area.
 		this.restore = function(){
 		
-			if (stateObj.text !== undefined && stateObj.text != inputArea.value) {
+			if (stateObj.text != undefined && stateObj.text != inputArea.value) {
 				inputArea.value = stateObj.text;
 			}
 			this.setInputAreaSelection();
@@ -2308,7 +2308,7 @@ Attacklab.wmdBase = function(){
 		// We make a level 2 header if there is no current header.
 		// If there is a header level, we substract one from the header level.
 		// If it's already a level 1 header, it's removed.
-		var headerLevelToCreate = headerLevel === 0 ? 2 : headerLevel - 1;
+		var headerLevelToCreate = headerLevel == 0 ? 2 : headerLevel - 1;
 		
 		if(headerLevelToCreate > 0){
 			
